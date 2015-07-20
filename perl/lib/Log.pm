@@ -31,6 +31,21 @@ sub time {
     return $t->datetime;
 }
 
+sub to_hash {
+    my ($self) = @_;
+    my %res = (
+        time   => $self->time,
+        uri    => $self->uri,
+        method => $self->method,
+    );
+    for my $key (qw/status size user referer/) {
+        if (exists $self->{$key}) {
+            $res{$key} = $self->{$key};
+        }
+    }
+    return \%res;
+}
+
 sub _parse_http_header {
     my ($self) = @_;
     my ($method, $path, $protocol) = split /\s+/, $self->{req};
