@@ -7,15 +7,23 @@ use URI;
 sub new {
     my ($class, %args) = @_;
     my $self = bless \%args, $class;
-    $self->_parse_http_header();
     return $self;
 }
 
-sub protocol { $_[0]->{_protocol} }
+sub protocol {
+    my ($self) = @_;
+    return (split /\s+/, $self->{req}, 3)[2];
+}
 
-sub method { $_[0]->{_method} }
+sub method {
+    my ($self) = @_;
+    return (split /\s+/, $self->{req}, 3)[0];
+}
 
-sub path { $_[0]->{_path} }
+sub path {
+    my ($self) = @_;
+    return (split /\s+/, $self->{req}, 3)[1];
+}
 
 sub uri {
     my ($self) = @_;
@@ -44,14 +52,6 @@ sub to_hash {
         }
     }
     return \%res;
-}
-
-sub _parse_http_header {
-    my ($self) = @_;
-    my ($method, $path, $protocol) = split /\s+/, $self->{req};
-    $self->{_method} = $method;
-    $self->{_path} = $path;
-    $self->{_protocol} = $protocol;
 }
 
 1;
