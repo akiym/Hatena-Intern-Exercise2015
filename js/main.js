@@ -42,5 +42,8 @@ function createLogTable(elem, logRecords) {
   });
 
   table.appendChild(tbody);
+  while (elem.hasChildNodes()) {
+    elem.removeChild(elem.firstChild);
+  }
   elem.appendChild(table);
 }
