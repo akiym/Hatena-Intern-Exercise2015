@@ -1,14 +1,16 @@
 // 課題 JS-1: 関数 `parseLTSVLog` を記述してください
 function parseLTSVLog(logStr) {
   if (!logStr) return [];
-  return logStr.trim().split("\n").map(function(line) {
+  return logStr.trim().split('\n').map(function(line) {
     var records = {};
-    line.split("\t").forEach(function(s) {
-      var kv = s.split(":", 2);
-      if (kv[0] === "epoch") {
-        records[kv[0]] = +kv[1];
+    line.split('\t').forEach(function(s) {
+      var kv = s.split(':');
+      var key = kv.shift();
+      var value = kv.join(':');
+      if (key === 'epoch') {
+        records[key] = +value;
       } else {
-        records[kv[0]] = kv[1];
+        records[key] = value;
       }
     });
     return records;
