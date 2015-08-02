@@ -3,12 +3,17 @@ use warnings;
 use Term::ReadKey ();
 use Parser;
 
+my $column = shift // 'status';
+
 my $parser = Parser->new(filename => '../sample_data/large_log.ltsv');
 my $logs = $parser->parse();
 
 my %result;
 for my $log (@$logs) {
-    $result{$log->path}->{$log->{status}}++;
+    unless (exists $log->{$column}) {
+        die "No such column: $column (@{[join ', ', keys %$log]})";
+    }
+    $result{$log->path}->{$log->{$column}}++;
 }
 
 print_diagram(%result);
