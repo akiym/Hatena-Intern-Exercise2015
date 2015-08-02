@@ -19,8 +19,10 @@ sub print_diagram {
         print "$path\n";
 
         my %r = %{$result{$path}};
-        my ($max_column_len) = sort { $a <=> $b } map length, keys %r;
-        my ($scale, $scale_text) = scale(50, $max_column_len);
+        my ($max_column_len) = sort { $b <=> $a } map length, keys %r;
+        my ($max_scale) = sort { $b <=> $a } values %r;
+        $max_scale = $max_scale < 50 ? 50 : $max_scale;
+        my ($scale, $scale_text) = scale($max_scale, $max_column_len + length($max_scale));
 
         print '-' x $max_column_len . ':';
         print $scale_text;
@@ -31,6 +33,7 @@ sub print_diagram {
             my $n = int($r{$key} * $scale);
             print '=' x ($n - 1);
             print '*';
+            print $r{$key};
             print "\n";
         }
         print "\n";
